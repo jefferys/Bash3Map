@@ -15,3 +15,9 @@
 
 # Not an R project
 *.Rproj
+
+# User installable frameworks
+#============================
+
+# Testing with shellspec
+test/lib/shellspec
