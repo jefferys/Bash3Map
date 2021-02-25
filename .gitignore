@@ -1,0 +1,17 @@
+# Mac OS
+#=======
+
+# File system extra info
+.DS_Store
+
+# IDE
+#====
+
+## RStudio
+##--------
+
+# User-specific ide/project config
+.Rproj.user
+
+# Not an R project
+*.Rproj
