@@ -29,9 +29,9 @@ getMap myMap "bKey"
 
 ## Testing
 
-Tests are written using [shellspec (0.28.1)](https://github.com/shellspec/shellspec), this must be available either globally or locally installed into test/lib/shellspec. Tests are run by running:
+Tests are written using [shellspec (0.28.1)](https://github.com/shellspec/shellspec), this must be available either globally or locally installed into test/lib/shellspec. Tests are run by changing to the test directory and running:
 
 ```  
-./test/test.sh
+./test.sh
 ```
 
