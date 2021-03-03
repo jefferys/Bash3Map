@@ -80,10 +80,16 @@ mapDelete() {
             local fore="${map%%"${rsep}${key}${fsep}"*}"
             aft="${aft#*${rsep}}"
             map="${fore}${rsep}${aft}"
+            
+            # Update the external map
+            # From bash 3.1+ Better as it keeps the named variable's original scope. 
+            printf -v "$mapVar" '%s' "$map"
+        
+            # More portable, but elevates the named variable to be a global.
+            # declare -g ${mapVar}="$map"
+
         fi
         
-        # Update the external map
-        declare -g ${mapVar}="$map"
     fi
     
     __="$oldVal"
@@ -122,7 +128,12 @@ mapSet() {
     fi
     
     # Update the external map
-    declare -g ${mapVar}="$map"
+    # From bash 3.1+ Better as it keeps the named variable's original scope. 
+    printf -v "$mapVar" '%s' "$map"
+
+    # More portable, but elevates the named variable to be a global.
+    # declare -g ${mapVar}="$map"
+
     __="$oldVal"
 }
 

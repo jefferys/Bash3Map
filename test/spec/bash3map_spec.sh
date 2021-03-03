@@ -36,7 +36,7 @@ Describe "Library bash3map.sh"
   End   # sayErr()
   
   Describe "Map operations with various keys and values"
-  
+     
     Parameters
       # key         # old value   # new value
       "aKey"        "aValue"      "bValue"
@@ -725,6 +725,19 @@ Describe "Library bash3map.sh"
     End
   End
   
+  Describe "Map variable scope"
+    Describe "mapSet()"
+      It "Does not export local map variable"
+        privateMap() {
+          local localMap
+          mapSet localMap "aKey" "aMap"
+        }
+          
+        When call privateMap
+        The variable localMap should be undefined
+      End
+    End
+  End
 End   # Library bash3map.sh
 
   
