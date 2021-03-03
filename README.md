@@ -81,8 +81,6 @@ The map keys are unique; setting an existing key changes its value. Values can b
 
 ## Functions
 
-All functions return 0 for success, 1 for parameter errors, and non-0 for all other errors.
-
 Most functions pass back a value; they do so using a global variable `__`. This should be assigned to a variable by the caller as soon as possible after the call to avoid it being over-written by another function call, e.g. `myAnswer=${__}`
 
 * **mapSet** *mapName* *key* *value* - Adds or updates a key-value pair.
@@ -102,12 +100,14 @@ Most functions pass back a value; they do so using a global variable `__`. This 
 
 ### Parameters
 
-* **`MAP_NAME`** A variable name identifying the map (unquoted bare name). Should not be otherwise used by the caller (don't modify its contents). Any number of maps may be simultaneously created with different names; this act like object instances.
+* **`MAP_NAME`** A variable name identifying the map (unquoted bare name). Should not be otherwise used by the caller (don't modify its contents). Any number of maps may be simultaneously created with different names; this act like object instances. If the provided variable name has content that is not recognized, the map function called will return 1 and report an error to STDERR.
 * **`KEY`** - The key part of a key-value pair, as a string.
 * **`VALUE`** - The value part of a key-value pair, as a string.
 * `[`**`STR`**`]*` - 0 or more space separated strings.
 
 Keys and values may be essentially any string, including empty strings, but they may not contain the non-printing characters  `\000`, `\036` or `\037`.
+
+If a map function receives too many or too few parameters, it will report an error to STDERR and return 1.
 
 
 ## Testing

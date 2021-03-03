@@ -738,6 +738,109 @@ Describe "Library bash3map.sh"
       End
     End
   End
+  
+  Describe "Error handling"
+    Describe "the mapVar param"
+      It "mapSet() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: The map variable \"myMap\" is not a correctly formatted map."
+        
+        When call mapSet myMap "akey" "bvalue"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapGet() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: The map variable \"myMap\" is not a correctly formatted map."
+        
+        When call mapGet myMap "akey"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapHas() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: The map variable \"myMap\" is not a correctly formatted map."
+        
+        When call mapHas myMap "akey"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapDelete() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: The map variable \"myMap\" is not a correctly formatted map."
+        
+        When call mapDelete myMap "akey"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapHasValue() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: The map variable \"myMap\" is not a correctly formatted map."
+        
+        When call mapHasValue myMap "bvalue"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapGetKeyFor() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: The map variable \"myMap\" is not a correctly formatted map."
+        
+        When call mapGetKeyFor myMap "bvalue"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+    End
+    Describe "Wrong number of parameters"
+      It "mapSet() requires 3 parameters"
+        myMap="akeybvalue"
+        wantErr="ERROR: mapSet takes 3 parameters but received 4."
+        
+        When call mapSet myMap "akey" "bvalue" ""
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapGet() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: mapGet takes 2 parameters but received 0."
+        
+        When call mapGet
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapHas() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: mapHas takes 2 parameters but received 1."
+        
+        When call mapHas "akey"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapDelete() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: mapDelete takes 2 parameters but received 3."
+        
+        When call mapDelete myMap "akey" "bValue"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapHasValue() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: mapHasValue takes 2 parameters but received 3."
+        
+        When call mapHasValue myMap "akey" "bvalue"
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+      It "mapGetKeyFor() errors on a bad values"
+        myMap="akeybvalue"
+        wantErr="ERROR: mapGetKeyFor takes 2 parameters but received 5."
+        
+        When call mapGetKeyFor "my Map" "a value" "" "" ""
+        The status should equal 1
+        The error should equal "$wantErr"
+      End
+    End
+  End
 End   # Library bash3map.sh
 
   

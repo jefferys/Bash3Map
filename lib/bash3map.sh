@@ -11,8 +11,32 @@ sayErr() {
    printf "ERROR: %b" "$message" >&2
 }
 
+_checkParamCount() {
+    local funcName="$1"
+    local wantCount=$2
+    local gotCount=$3
+    
+    if [[ $wantCount -ne $gotCount ]]; then
+        sayErr "$funcName takes $wantCount parameters but received $gotCount."
+        return 1
+    fi
+}
+
+_validateMapVar() {
+    _checkParamCount "${FUNCNAME[0]}" 2 $# || return $?
+    local mapVar="$1"
+    local map="$2"
+    local firstChar
+    printf -v firstChar "%c" "${map}"
+    if [[ "$firstChar" != ${rsep} ]]; then
+        sayErr "The map variable \"$mapVar\" is not a correctly formatted map."
+        return 1
+    fi
+}
+
 # Returns "true" if key is in map, "false" otherwise 
 mapHas() {
+    _checkParamCount "${FUNCNAME[0]}" 2 $# || return $?
     local mapVar="$1"
     local key="$2"
 
@@ -22,9 +46,11 @@ mapHas() {
     local found="false"
     
     if [[ -n "$map" ]]; then
+        _validateMapVar "$mapVar" "$map" || return $?
+
         # Not handling an empty map
         local aft="${map#*"${rsep}${key}${fsep}"}"
-    
+        
         if [[ "$aft" != "$map" ]]; then
             # Key was found
             found="true"
@@ -36,6 +62,7 @@ mapHas() {
 
 # Returns "true" if value is in map, "false" otherwise 
 mapHasValue() {
+    _checkParamCount "${FUNCNAME[0]}" 2 $# || return $?
     local mapVar="$1"
     local value="$2"
 
@@ -45,6 +72,8 @@ mapHasValue() {
     local found="false"
     
     if [[ -n "$map" ]]; then
+        _validateMapVar "$mapVar" "$map" || return $?
+
         # Not handling an empty map
         local aft="${map#*"${fsep}${value}${rsep}"}"
     
@@ -58,6 +87,7 @@ mapHasValue() {
 }
 
 mapDelete() {
+    _checkParamCount "${FUNCNAME[0]}" 2 $# || return $?
     local mapVar="$1"  # Name of map (variable) used by caller
     local key="$2"
     
@@ -68,6 +98,7 @@ mapDelete() {
 
     # Don't change an empty map
     if [[ -n "$map" ]]; then
+        _validateMapVar "$mapVar" "$map" || return $?
 
         # Get map sub-string starting with key's value, or the whole string if
         # "key" is not found
@@ -97,6 +128,7 @@ mapDelete() {
 
 # Add/change a key/value in a map, initilizinng the map if needed.
 mapSet() {
+    _checkParamCount "${FUNCNAME[0]}" 3 $# || return $?
     local mapVar="$1"  # Name of map (variable) used by caller
     local key="$2"
     local value="$3"
@@ -110,6 +142,8 @@ mapSet() {
         # Handling an empty map
         map="${rsep}${key}${fsep}${value}${rsep}"
     else
+        _validateMapVar "$mapVar" "$map" || return $?
+
         # Get map sub-string starting with key's value, or the whole string if
         # "key" is not found
         local aft="${map#*"${rsep}${key}${fsep}"}"
@@ -138,6 +172,7 @@ mapSet() {
 }
 
 mapGet() {
+    _checkParamCount "${FUNCNAME[0]}" 2 $# || return $?
     local mapVar="$1"
     local key="$2"
 
@@ -148,6 +183,8 @@ mapGet() {
     
     if [[ -n "$map" ]]; then
         # Not handling an empty map
+        _validateMapVar "$mapVar" "$map" || return $?
+
         local aft="${map#*"${rsep}${key}${fsep}"}"
 
         if [[ "$aft" != "$map" ]]; then
@@ -160,6 +197,7 @@ mapGet() {
 }
 
 mapGetKeyFor() {
+    _checkParamCount "${FUNCNAME[0]}" 2 $# || return $?
     local mapVar="$1"
     local value="$2"
 
@@ -170,6 +208,8 @@ mapGetKeyFor() {
     
     if [[ -n "$map" ]]; then
         # Not handling an empty map
+        _validateMapVar "$mapVar" "$map" || return $?
+
         local fore="${map%"${fsep}${value}${rsep}"*}"
 
         if [[ "$aft" != "$map" ]]; then
